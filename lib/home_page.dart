@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_dynamic_form_fields/user_model.dart';
+import 'package:medical_form/user_model.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,6 +14,7 @@ class _HomePageState extends State<HomePage> {
   late UserModel userModel = new UserModel(
     "",
     18,
+    "",
     new List<String>.empty(growable: true),
   );
 
@@ -21,14 +22,14 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    userModel.emails.add("");
+    userModel.details.add("");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("User Form"),
+        title: Text("Medical Form"),
         backgroundColor: Colors.redAccent,
       ),
       body: _uiWidget(),
@@ -51,19 +52,19 @@ class _HomePageState extends State<HomePage> {
                   context,
                   Icon(Icons.web),
                   "name",
-                  "User Name",
+                  "Patient Name",
                   "",
                   (onValidateVal) {
                     if (onValidateVal.isEmpty) {
-                      return 'User Name can\'t be empty.';
+                      return 'Patient Name can\'t be empty.';
                     }
 
                     return null;
                   },
                   (onSavedVal) => {
-                    this.userModel.userName = onSavedVal,
+                    this.userModel.patientName = onSavedVal,
                   },
-                  initialValue: this.userModel.userName,
+                  initialValue: this.userModel.patientName,
                   obscureText: false,
                   borderFocusColor: Theme.of(context).primaryColor,
                   prefixIconColor: Theme.of(context).primaryColor,
@@ -83,7 +84,7 @@ class _HomePageState extends State<HomePage> {
                   context,
                   Icon(Icons.web),
                   "name",
-                  "Age",
+                  "Patient Age",
                   "",
                   (onValidateVal) {
                     if (onValidateVal.isEmpty) {
@@ -93,9 +94,41 @@ class _HomePageState extends State<HomePage> {
                     return null;
                   },
                   (onSavedVal) => {
-                    this.userModel.userAge = int.parse(onSavedVal),
+                    this.userModel.patientAge = int.parse(onSavedVal),
                   },
-                  initialValue: this.userModel.userAge.toString(),
+                  initialValue: this.userModel.patientAge.toString(),
+                  obscureText: false,
+                  borderFocusColor: Theme.of(context).primaryColor,
+                  prefixIconColor: Theme.of(context).primaryColor,
+                  borderColor: Theme.of(context).primaryColor,
+                  borderRadius: 2,
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                  showPrefixIcon: false,
+                  fontSize: 13,
+                  labelFontSize: 13,
+                  onChange: (val) {},
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 5),
+                child: FormHelper.inputFieldWidgetWithLabel(
+                  context,
+                  Icon(Icons.web),
+                  "name",
+                  "Disease Name",
+                  "",
+                  (onValidateVal) {
+                    if (onValidateVal.isEmpty) {
+                      return 'Disease Name can\'t be empty.';
+                    }
+
+                    return null;
+                  },
+                  (onSavedVal) => {
+                    this.userModel.diseaseName = onSavedVal,
+                  },
+                  initialValue: this.userModel.patientName,
                   obscureText: false,
                   borderFocusColor: Theme.of(context).primaryColor,
                   prefixIconColor: Theme.of(context).primaryColor,
@@ -116,7 +149,17 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      "Email Address(s)",
+                      "Symptom(s)",
+                      textAlign: TextAlign.left,
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  emailsContainerUI(),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      "Medicine(s) & Time",
                       textAlign: TextAlign.left,
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
@@ -146,14 +189,14 @@ class _HomePageState extends State<HomePage> {
     return ListView.separated(
       shrinkWrap: true,
       physics: ScrollPhysics(),
-      itemCount: this.userModel.emails.length,
+      itemCount: this.userModel.details.length,
       itemBuilder: (context, index) {
         return Column(
           children: <Widget>[
             Row(children: <Widget>[
               Flexible(
                 fit: FlexFit.loose,
-                child: emailUI(index),
+                child: detailUI(index),
               ),
             ]),
           ],
@@ -163,7 +206,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget emailUI(index) {
+  Widget detailUI(index) {
     return Padding(
       padding: EdgeInsets.all(10),
       child: Row(
@@ -173,19 +216,19 @@ class _HomePageState extends State<HomePage> {
             child: FormHelper.inputFieldWidget(
               context,
               Icon(Icons.web),
-              "email_$index",
+              "detail_$index",
               "",
               (onValidateVal) {
                 if (onValidateVal.isEmpty) {
-                  return 'Email ${index + 1} can\'t be empty.';
+                  return 'Detail ${index + 1} can\'t be empty.';
                 }
 
                 return null;
               },
               (onSavedVal) => {
-                this.userModel.emails[index] = onSavedVal,
+                this.userModel.details[index] = onSavedVal,
               },
-              initialValue: this.userModel.emails[index],
+              initialValue: this.userModel.details[index],
               obscureText: false,
               borderFocusColor: Theme.of(context).primaryColor,
               prefixIconColor: Theme.of(context).primaryColor,
@@ -207,11 +250,11 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.green,
                 ),
                 onPressed: () {
-                  addEmailControl();
+                  addDetailControl();
                 },
               ),
             ),
-            visible: index == this.userModel.emails.length - 1,
+            visible: index == this.userModel.details.length - 1,
           ),
           Visibility(
             child: SizedBox(
@@ -222,7 +265,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.redAccent,
                 ),
                 onPressed: () {
-                  removeEmailControl(index);
+                  removeDetailControl(index);
                 },
               ),
             ),
@@ -233,16 +276,16 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void addEmailControl() {
+  void addDetailControl() {
     setState(() {
-      this.userModel.emails.add("");
+      this.userModel.details.add("");
     });
   }
 
-  void removeEmailControl(index) {
+  void removeDetailControl(index) {
     setState(() {
-      if (this.userModel.emails.length > 1) {
-        this.userModel.emails.removeAt(index);
+      if (this.userModel.details.length > 1) {
+        this.userModel.details.removeAt(index);
       }
     });
   }
