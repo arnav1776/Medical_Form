@@ -16,6 +16,7 @@ class _FormPageState extends State<FormPage> {
     18,
     "",
     new List<String>.empty(growable: true),
+    new List<String>.empty(growable: true),
   );
 
   @override
@@ -175,7 +176,8 @@ class _FormPageState extends State<FormPage> {
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  detailsContainerUI(),
+                  detailsContainerUI1(),
+                  
                   new Center(
                     child: FormHelper.submitButton(
                       "Save",
@@ -207,6 +209,27 @@ class _FormPageState extends State<FormPage> {
               Flexible(
                 fit: FlexFit.loose,
                 child: detailUI(index),
+              ),
+            ]),
+          ],
+        );
+      },
+      separatorBuilder: (context, index) => Divider(),
+    );
+  }
+
+  Widget detailsContainerUI1() {
+    return ListView.separated(
+      shrinkWrap: true,
+      physics: ScrollPhysics(),
+      itemCount: this.userModel.details.length,
+      itemBuilder: (context, index) {
+        return Column(
+          children: <Widget>[
+            Row(children: <Widget>[
+              Flexible(
+                fit: FlexFit.loose,
+                child: detailUI1(index),
               ),
             ]),
           ],
@@ -285,8 +308,77 @@ class _FormPageState extends State<FormPage> {
       ),
     );
   }
+  Widget detailUI1(index) {
+    return Padding(
+      padding: EdgeInsets.all(10),
+      child: Row(
+        children: [
+          Flexible(
+            flex: 1,
+            child: FormHelper.inputFieldWidget(
+              context,
+              Icon(Icons.web),
+              "detail_$index",
+              "",
+              (onValidateVal) {
+                if (onValidateVal.isEmpty) {
+                  return 'Detail ${index + 1} can\'t be empty.';
+                }
 
+                return null;
+              },
+              (onSavedVal) => {
+                this.userModel.details[index] = onSavedVal,
+              },
+              initialValue: this.userModel.details[index],
+              obscureText: false,
+              borderFocusColor: Theme.of(context).primaryColor,
+              prefixIconColor: Theme.of(context).primaryColor,
+              borderColor: Theme.of(context).primaryColor,
+              borderRadius: 2,
+              paddingLeft: 0,
+              paddingRight: 0,
+              showPrefixIcon: false,
+              fontSize: 13,
+              onChange: (val) {},
+            ),
+          ),
+          Visibility(
+            child: SizedBox(
+              width: 35,
+              child: IconButton(
+                icon: Icon(
+                  Icons.add_circle,
+                  color: Colors.green,
+                ),
+                onPressed: () {
+                  addDetailControl();
+                },
+              ),
+            ),
+            visible: index == this.userModel.details.length - 1,
+          ),
+          Visibility(
+            child: SizedBox(
+              width: 35,
+              child: IconButton(
+                icon: Icon(
+                  Icons.remove_circle,
+                  color: Colors.redAccent,
+                ),
+                onPressed: () {
+                  removeDetailControl(index);
+                },
+              ),
+            ),
+            visible: index > 0,
+          )
+        ],
+      ),
+    );
+  }
 
+  
 
   void addDetailControl() {
     setState(() {
