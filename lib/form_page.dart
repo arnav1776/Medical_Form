@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:medical_form/user_model.dart';
 import 'package:snippet_coder_utils/FormHelper.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class FormPage extends StatefulWidget {
+  const FormPage({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _FormPageState createState() => _FormPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _FormPageState extends State<FormPage> {
   GlobalKey<FormState> globalFormKey = GlobalKey<FormState>();
   late UserModel userModel = new UserModel(
     "",
@@ -155,17 +155,27 @@ class _HomePageState extends State<HomePage> {
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  emailsContainerUI(),
+                  detailsContainerUI(),
                   Padding(
                     padding: const EdgeInsets.all(10),
                     child: Text(
-                      "Medicine(s) & Time",
+                      "Medicine(s)",
                       textAlign: TextAlign.left,
                       style:
                           TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                     ),
                   ),
-                  emailsContainerUI(),
+                  detailsContainerUI(),
+                  Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      "Time",
+                      textAlign: TextAlign.left,
+                      style:
+                          TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  detailsContainerUI(),
                   new Center(
                     child: FormHelper.submitButton(
                       "Save",
@@ -185,7 +195,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget emailsContainerUI() {
+  Widget detailsContainerUI() {
     return ListView.separated(
       shrinkWrap: true,
       physics: ScrollPhysics(),
@@ -275,6 +285,8 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+
 
   void addDetailControl() {
     setState(() {
